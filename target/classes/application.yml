@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/buptStore?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 10MB #单个文件大小为10MB
+      max-request-size: 100MB #多个文件大小为100MB
+
+mybatis-plus:
+  configuration:
+    # ????
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # ??????
+  type-aliases-package:
+
+bupt:
+  path: D:\IDEA project\java_project\buptStore\src\load\
