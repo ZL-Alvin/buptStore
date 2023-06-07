@@ -19,3 +19,4 @@ mybatis-plus:
 
 bupt:
   path: D:\IDEA project\java_project\buptStore\src\load\
+  serverPath: /usr/local/app/buptStore/

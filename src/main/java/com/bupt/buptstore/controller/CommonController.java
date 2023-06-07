@@ -30,7 +30,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/common")
 public class CommonController {
-    @Value("${bupt.path}")
+    @Value("${bupt.serverPath}")
     private String basePath;
 
     /**设置上传文件的最大值*/
