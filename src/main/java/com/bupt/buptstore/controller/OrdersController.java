@@ -38,10 +38,10 @@ public class OrdersController {
     private OrderDetailService orderDetailService;
 
     @PostMapping("/submit")
-    public R<String> submit(HttpServletRequest request, @RequestBody Orders orders) {
+    public R<Orders> submit(HttpServletRequest request, @RequestBody Orders orders) {
         Long userId = (Long) request.getSession().getAttribute("user");
-        ordersService.submit(userId, orders);
-        return R.success("下单成功！");
+        Orders submitOrder = ordersService.submit(userId, orders);
+        return R.success(submitOrder);
     }
 
     @GetMapping("/userPage")

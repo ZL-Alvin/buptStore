@@ -1,5 +1,6 @@
 package com.bupt.buptstore.config;
 
+import com.bupt.buptstore.common.CustomJsonHttpMessageConverter;
 import com.bupt.buptstore.common.JacksonObjectMapper;
 import com.bupt.buptstore.interceptor.frontLoginInterceptor;
 import com.bupt.buptstore.interceptor.loginInterceptor;
@@ -43,6 +44,7 @@ public class webMVCConfig implements WebMvcConfigurer {
         patterns.add("/front/page/login.html");
         patterns.add("/user/sendMsg");
         patterns.add("/user/login");
+        patterns.add("/alipay/**");
         registry.addInterceptor(interceptor).addPathPatterns("/backend/**").excludePathPatterns(patterns);
         registry.addInterceptor(frontInterceptor).addPathPatterns("/front/**").excludePathPatterns(patterns);
     }
@@ -55,5 +57,6 @@ public class webMVCConfig implements WebMvcConfigurer {
         messageConverter.setObjectMapper(new JacksonObjectMapper());
         //将上面的消息转换器对象追加到mvc框架的转换起集合中
         converters.add(0, messageConverter);
+        converters.add(new CustomJsonHttpMessageConverter());
     }
 }

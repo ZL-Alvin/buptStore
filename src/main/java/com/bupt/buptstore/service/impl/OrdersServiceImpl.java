@@ -44,7 +44,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Override
     @Transactional
-    public void submit(Long userId, Orders orders) {
+    public Orders submit(Long userId, Orders orders) {
         //查询当前用户的购物车数据
         LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(userId != null, ShoppingCart::getUserId, userId);
@@ -96,6 +96,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         orderDetailService.saveBatch(orderDetails);
         //清空购物车数据
         shoppingCartService.remove(queryWrapper);
+        return orders;
     }
 
     @Override
@@ -108,7 +109,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(number != null, Orders::getNumber, number)
                 .ge(beginTime != null, Orders::getCheckoutTime, beginTime)
-                .le(endTime != null, Orders::getCheckoutTime, endTime);
+                .le(endTime != null, Orders::getCheckoutTime, endTime).orderByDesc(Orders::getCheckoutTime);
         this.page(ordersPage, queryWrapper);
         BeanUtils.copyProperties(ordersPage, dtoPage, "records");
         List<Orders> orderRecords = ordersPage.getRecords();

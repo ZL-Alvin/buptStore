@@ -18,9 +18,11 @@ import java.time.LocalDateTime;
 public interface OrdersService extends IService<Orders> {
     /**
      * 用户下单
+     * @param userId
      * @param orders
+     * @return
      */
-    public void submit(Long userId, Orders orders);
+    public Orders submit(Long userId, Orders orders);
 
     /**
      * 后台订单明细显示
