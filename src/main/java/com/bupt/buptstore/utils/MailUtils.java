@@ -25,12 +25,23 @@ public class MailUtils {
     public static boolean sendMail(String to, String text){
         try {
             final Properties props = new Properties();
-            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.auth", "true"); //开启认证
 //            注意发送邮件的方法中，发送给谁的，发送给对应的app，※
 //            要改成对应的app。扣扣的改成qq的，网易的要改成网易的。※
 //            props.put("mail.smtp.host", "smtp.qq.com");
             props.put("mail.smtp.host", "smtp.sina.com");
 
+/*            阿里云ECS默认禁用25端口导致发邮件失败：Couldn't connect to host, port: smtp.example.com
+            有两种解决方法：
+                        1. 向阿里云申请解封25端口  => https://help.aliyun.com/knowledge_detail/56130.html
+                        2. 改用465端口ssl加密发送。*/
+            // 因为阿里云服务器不允许smtp（默认端口25）发送邮件，所以要改成ssl发送，并且设置端口为465，本机测试的话不加下面这段代码也可也成功
+            props.put("mail.smtp.port","465");//设置端口
+            props.put("mail.smtp.ssl.enable", true);
+            props.put("mail.smtp.socketFactory.port", "465");//设置ssl端口
+            props.put("mail.smtp.socketFactory.fallback", "false");
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            //*************************************************************************************
             // 发件人的账号
             props.put("mail.user", USER);
             //发件人的密码

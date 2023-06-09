@@ -10,6 +10,7 @@ spring:
       max-file-size: 10MB #单个文件大小为10MB
       max-request-size: 100MB #多个文件大小为100MB
 
+
 mybatis-plus:
   configuration:
     # ????
@@ -40,4 +41,5 @@ alipay:
   returnUrl: http://8.146.198.76:8080/front/page/pay-success.html
   # 服务器异步通知页面路径
   notifyUrl: http://8.146.198.76:8080/alipay/notify
+
 
