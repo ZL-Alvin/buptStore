@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.bupt.buptstore.common.R;
 import com.bupt.buptstore.pojo.User;
 import com.bupt.buptstore.service.UserService;
+import com.bupt.buptstore.utils.MailUtils;
 import com.bupt.buptstore.utils.SMSUtils;
 import com.bupt.buptstore.utils.ValidateCodeUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +38,7 @@ public class UserController {
     public R<String> sendMsg(@RequestBody User user, HttpSession session) {
         //获取手机号
         String phone = user.getPhone();
+        String email = user.getEmail();
         if (StringUtils.isNotEmpty(phone)) {
             //生成随机的4位验证码
             String code = String.valueOf(ValidateCodeUtils.generateValidateCode(4));
@@ -44,7 +46,8 @@ public class UserController {
 
             //调用阿里云提供的短信服务API完成发送短信
 //            SMSUtils.sendMessage("外卖", "", phone, code);
-
+            //调用邮箱smtp功能发送邮件验证码
+            MailUtils.sendMail(email, code);
             //将生成的验证码保存到Session
             session.setAttribute(phone, code);
             return R.success("手机验证码发送成功！");
