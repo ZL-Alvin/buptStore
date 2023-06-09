@@ -37,7 +37,7 @@ alipay:
   # 接口内容加密密钥
   contentKey: J7R3ROn+P0bo4FKY9ItHtw==
   # 页面跳转同步通知页面路径
-  returnUrl: http://localhost:8080/front/page/pay-success.html
+  returnUrl: http://8.146.198.76:8080/front/page/pay-success.html
   # 服务器异步通知页面路径
-  notifyUrl: http://localhost:8080/alipay/notify
+  notifyUrl: http://8.146.198.76:8080/alipay/notify
 

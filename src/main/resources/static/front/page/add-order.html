@@ -193,7 +193,7 @@
                         }
                         const res = await addOrderApi(params)
                         if(res.code === 1){
-                            window.open("http://localhost:8080/alipay/pay?id=" + res.data.id + "&amount=" + res.data.amount)
+                            window.open("http://8.146.198.76:8080/alipay/pay?id=" + res.data.id + "&amount=" + res.data.amount)
                             this.$message("请求支付宝成功！")
                             // window.requestAnimationFrame(()=>{
                             //     window.location.replace('/front/page/pay-success.html')
