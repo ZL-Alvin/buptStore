@@ -29,7 +29,7 @@
                 <span @click='getCode'>获取验证码</span>
             </div>
             <div class="divMsg" v-if="msgFlag">手机号输入不正确，请重新输入</div>
-            <br><br>
+            <br><br><br><br><br>
             <el-button type="primary" :class="{btnSubmit:1===1,btnNoPhone:!form.phone,btnPhone:form.phone}" @click="btnLogin">登录</el-button>
         </div>
         <!-- 开发环境版本，包含了有帮助的命令行警告 -->
