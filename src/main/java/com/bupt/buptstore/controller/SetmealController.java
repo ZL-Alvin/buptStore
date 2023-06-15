@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -105,6 +106,7 @@ public class SetmealController {
         return R.success("删除成功！");
     }
 
+    @Cacheable(value = "setmealCache", key = "#categoryId + '_' + #status")
     @GetMapping("/list")
     public R<List<SetmealDto>> list(Long categoryId, Integer status) {
         LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();

@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +49,7 @@ public class DishController {
     private RedisTemplate redisTemplate;
 
     @PostMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> save(HttpServletRequest request, @RequestBody DishDto dishDto) {
         Long empId = (Long) request.getSession().getAttribute("employee");
         BaseContext.setCurrentId(empId);
@@ -115,14 +119,22 @@ public class DishController {
         Long empId = (Long) request.getSession().getAttribute("employee");
         BaseContext.setCurrentId(empId);
         dishService.updateStatus(ids, status);
+        //清理所有菜品的缓存
+        Set keys = redisTemplate.keys("*");
+        redisTemplate.delete(keys);
         return R.success("修改售卖状态成功！");
     }
 
+
     @DeleteMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String > deleteDishAndFlavor(HttpServletRequest request, @RequestParam List<Long> ids) {
         Long empId = (Long) request.getSession().getAttribute("employee");
         BaseContext.setCurrentId(empId);
         dishService.deleteDishAndFlavor(ids);
+        //清理所有菜品的缓存
+        Set keys = redisTemplate.keys("*");
+        redisTemplate.delete(keys);
         return R.success("删除成功！");
     }
 
