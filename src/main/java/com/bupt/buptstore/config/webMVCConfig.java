@@ -4,12 +4,23 @@ import com.bupt.buptstore.common.CustomJsonHttpMessageConverter;
 import com.bupt.buptstore.common.JacksonObjectMapper;
 import com.bupt.buptstore.interceptor.frontLoginInterceptor;
 import com.bupt.buptstore.interceptor.loginInterceptor;
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +33,8 @@ import java.util.List;
  * @description:
  */
 @Configuration
+//@EnableSwagger2
+//@EnableKnife4j
 public class webMVCConfig implements WebMvcConfigurer {
     //配置登录拦截器
     @Override
@@ -45,8 +58,21 @@ public class webMVCConfig implements WebMvcConfigurer {
         patterns.add("/user/sendMsg");
         patterns.add("/user/login");
         patterns.add("/alipay/**");
-        registry.addInterceptor(interceptor).addPathPatterns("/backend/**").excludePathPatterns(patterns);
+//        patterns.add("/doc.html");
+//        patterns.add("/webjars/**");
+//        patterns.add("/swagger-resources");
+//        patterns.add("/v2/api-docs");
+/*
+* 拦截器无法拦截静态资源映射请求，因为在Spring MVC中，请求的处理是按照HandlerMapping和HandlerAdapter的顺序进行的，
+* 而拦截器是在HandlerMapping之后、HandlerAdapter之前执行的。而静态资源处理器会在HandlerMapping中进行处理，
+* 因此在静态资源请求中，拦截器还没有被执行。
+* 可以使用Filter替代拦截器：可以通过自定义Filter来处理静态资源请求，并将其注册到Spring Boot应用程序中。Filter的执行顺序在拦截器之前，因此可以拦截到静态资源请求。
+* 或者使用自定义HandlerInterceptorAdapter：继承HandlerInterceptorAdapter并实现preHandle()方法，
+* 然后在该方法中对静态资源请求进行处理。将自定义的拦截器注册到Spring Boot应用程序中。
+* */
         registry.addInterceptor(frontInterceptor).addPathPatterns("/front/**").excludePathPatterns(patterns);
+        registry.addInterceptor(interceptor).addPathPatterns("/backend/**").excludePathPatterns(patterns);
+
     }
 
     @Override
@@ -59,4 +85,30 @@ public class webMVCConfig implements WebMvcConfigurer {
         converters.add(0, messageConverter);
         converters.add(new CustomJsonHttpMessageConverter());
     }
+
+    /*knife4j的配置类*/
+//    @Bean
+//    public Docket createRestApi() {
+//        //文档类型
+//        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select()
+//                .apis(RequestHandlerSelectors.basePackage("com.bupt.buptstore.controller"))
+//                .paths(PathSelectors.any())
+//                .build();
+//    }
+//
+//    private ApiInfo apiInfo() {
+//        return new ApiInfoBuilder().title("buptStore").version("1.0").description("buptStore接口文档").build();
+//    }
+//
+
+
+//    静态资源映射配置
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//    WebMvcConfigurer.super.addResourceHandlers(registry);
+//        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources");
+//        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        //addResourceHandler是映射的地址，addResourceLocations是静态资源地址的地址，classpath:是生成target的classes文件夹地址，file:是系统文件中的绝对路径地址
+//        registry.addResourceHandler("/haha/**").addResourceLocations("classpath:/static/backend/");
+//    }
 }
